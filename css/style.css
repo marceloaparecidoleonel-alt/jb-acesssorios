@@ -462,6 +462,7 @@ button {
     grid-template-columns: repeat(6, 1fr);
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 
 .infobar-card {
