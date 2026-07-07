@@ -20,11 +20,12 @@ const PRODUTOS_DEFAULT = [
 let filtroAtivo = 'todos';
 let buscaAtiva  = '';
 let todosProdutos = [];
+let todasColecoes = [];
 
 // ---- INIT ----
 async function init() {
     mostrarSkeleton();
-    todosProdutos = await carregarProdutos();
+    [todosProdutos, todasColecoes] = await Promise.all([carregarProdutos(), carregarColecoes()]);
     renderFiltros();
     verificarURL();
     renderProdutos();
@@ -44,6 +45,18 @@ async function carregarProdutos() {
     return PRODUTOS_DEFAULT;
 }
 
+async function carregarColecoes() {
+    try {
+        if (typeof db !== 'undefined') {
+            const snap = await db.collection('colecoes').get();
+            if (!snap.empty) {
+                return snap.docs.map(d => d.data().nome);
+            }
+        }
+    } catch { /* fallback */ }
+    return ['Brincos', 'Colares', 'Pulseiras', 'Anéis', 'Conjuntos'];
+}
+
 // ---- SKELETON ----
 function mostrarSkeleton() {
     const grid = document.getElementById('catalogGrid');
@@ -60,7 +73,7 @@ function mostrarSkeleton() {
 
 // ---- FILTROS ----
 function renderFiltros() {
-    const colecoes   = [...new Set(todosProdutos.map(p => p.colecao).filter(Boolean))];
+    const colecoes   = todasColecoes.length ? todasColecoes : [...new Set(todosProdutos.map(p => p.colecao).filter(Boolean))];
     const container  = document.getElementById('catalogFilters');
     const todosBtn   = `<button class="filter-btn active" data-filter="todos" onclick="setFiltro('todos', this)">Todos</button>`;
     const botoesCol  = colecoes.map(c =>
