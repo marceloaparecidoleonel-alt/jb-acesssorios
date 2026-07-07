@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "nome": "Brincos",
+    "descricao": "Brincos delicados e sofisticados",
+    "imagem": ""
+  },
+  {
+    "id": 2,
+    "nome": "Colares",
+    "descricao": "Colares em prata e semijoia",
+    "imagem": ""
+  },
+  {
+    "id": 3,
+    "nome": "Pulseiras",
+    "descricao": "Pulseiras banhadas e ajustáveis",
+    "imagem": ""
+  },
+  {
+    "id": 4,
+    "nome": "Anéis",
+    "descricao": "Anéis elegantes e modernos",
+    "imagem": ""
+  },
+  {
+    "id": 5,
+    "nome": "Conjuntos",
+    "descricao": "Conjuntos completos com curadoria",
+    "imagem": ""
+  }
+]

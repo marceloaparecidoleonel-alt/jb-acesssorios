@@ -1,0 +1,20 @@
+[
+  {
+    "id": "4ed5c786a18351166bd0477f",
+    "nome": "Marina Alves",
+    "texto": "Amei as peças! Qualidade incrível e atendimento super atencioso.",
+    "estrelas": 5
+  },
+  {
+    "id": "7bcacd645bef55ad1a901bf2",
+    "nome": "Camila Rodrigues",
+    "texto": "O colar que comprei é lindo e não manchou nada. Recomendo muito!",
+    "estrelas": 5
+  },
+  {
+    "id": "faa8499826041f8e7e0b75eb",
+    "nome": "Fernanda Costa",
+    "texto": "Loja encantadora, peças sofisticadas e preço justo. Voltarei sempre.",
+    "estrelas": 5
+  }
+]

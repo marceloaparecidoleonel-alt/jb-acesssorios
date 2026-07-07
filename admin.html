@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB Acessórios | Painel Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="assets/img/WhatsApp Image 2026-07-07 at 13.36.43.png" alt="JB Acessórios">
+            </div>
+            <h1>Painel Administrativo</h1>
+            <p>Acesse com suas credenciais</p>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="loginUser" placeholder="admin" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <div class="login-error" id="loginError">Usuário ou senha incorretos.</div>
+                <button type="submit" class="btn-login">ENTRAR</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN LAYOUT -->
+    <div class="admin-layout" id="adminLayout" style="display:none">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/img/WhatsApp Image 2026-07-07 at 13.36.43.png" alt="JB Acessórios">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">&#9632;</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-page="produtos">
+                    <span class="nav-icon">&#10042;</span>
+                    Produtos
+                </a>
+                <a href="#" class="nav-item" data-page="colecoes">
+                    <span class="nav-icon">&#9670;</span>
+                    Coleções
+                </a>
+                <a href="#" class="nav-item" data-page="depoimentos">
+                    <span class="nav-icon">&#9733;</span>
+                    Depoimentos
+                </a>
+                <a href="#" class="nav-item" data-page="configuracoes">
+                    <span class="nav-icon">&#9881;</span>
+                    Configurações
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" target="_blank" class="btn-ver-site">Ver site</a>
+                <button class="btn-logout" id="btnLogout">Sair</button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="admin-main">
+
+            <!-- TOP BAR -->
+            <header class="admin-topbar">
+                <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+                <div class="topbar-breadcrumb" id="breadcrumb">Dashboard</div>
+                <div class="topbar-user">
+                    <span class="user-avatar">A</span>
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <!-- PAGES -->
+            <div class="admin-content">
+
+                <!-- DASHBOARD -->
+                <section class="page active" id="page-dashboard">
+                    <div class="page-header">
+                        <h2>Dashboard</h2>
+                        <p>Visão geral do seu catálogo</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon gold">&#10042;</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statProdutos">0</span>
+                                <span class="stat-label">Produtos</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">&#9670;</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statColecoes">0</span>
+                                <span class="stat-label">Coleções</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon gold">&#9733;</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statDepoimentos">0</span>
+                                <span class="stat-label">Depoimentos</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">&#9993;</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statContatos">0</span>
+                                <span class="stat-label">Contatos WhatsApp</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Últimos Produtos</h3>
+                                <a href="#" class="link-gold" data-page="produtos">Ver todos</a>
+                            </div>
+                            <table class="mini-table" id="dashProdutosTable">
+                                <thead><tr><th>Nome</th><th>Preço</th><th>Coleção</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Acesso Rápido</h3>
+                            </div>
+                            <div class="quick-actions">
+                                <button class="quick-btn" data-page="produtos" data-action="novo">+ Novo Produto</button>
+                                <button class="quick-btn" data-page="colecoes" data-action="nova">+ Nova Coleção</button>
+                                <button class="quick-btn" data-page="depoimentos" data-action="novo">+ Novo Depoimento</button>
+                                <a href="index.html" target="_blank" class="quick-btn">Visualizar Site</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRODUTOS -->
+                <section class="page" id="page-produtos">
+                    <div class="page-header">
+                        <div>
+                            <h2>Produtos</h2>
+                            <p>Gerencie o catálogo de produtos</p>
+                        </div>
+                        <button class="btn-primary" id="btnNovoProduto">+ Novo Produto</button>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-toolbar">
+                            <input type="text" class="search-input" id="searchProdutos" placeholder="Buscar produto...">
+                        </div>
+                        <table class="data-table" id="produtosTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Coleção</th>
+                                    <th>Preço</th>
+                                    <th>Descrição</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="produtosBody"></tbody>
+                        </table>
+                        <div class="table-empty" id="produtosEmpty">Nenhum produto cadastrado ainda.</div>
+                    </div>
+                </section>
+
+                <!-- COLEÇÕES -->
+                <section class="page" id="page-colecoes">
+                    <div class="page-header">
+                        <div>
+                            <h2>Coleções</h2>
+                            <p>Gerencie as categorias de produtos</p>
+                        </div>
+                        <button class="btn-primary" id="btnNovaColecao">+ Nova Coleção</button>
+                    </div>
+                    <div class="collections-grid" id="colecoesGrid"></div>
+                    <div class="table-empty" id="colecoesEmpty">Nenhuma coleção cadastrada ainda.</div>
+                </section>
+
+                <!-- DEPOIMENTOS -->
+                <section class="page" id="page-depoimentos">
+                    <div class="page-header">
+                        <div>
+                            <h2>Depoimentos</h2>
+                            <p>Gerencie os depoimentos de clientes</p>
+                        </div>
+                        <button class="btn-primary" id="btnNovoDepoimento">+ Novo Depoimento</button>
+                    </div>
+                    <div class="testimonials-admin-grid" id="depoimentosGrid"></div>
+                    <div class="table-empty" id="depoimentosEmpty">Nenhum depoimento cadastrado ainda.</div>
+                </section>
+
+                <!-- CONFIGURAÇÕES -->
+                <section class="page" id="page-configuracoes">
+                    <div class="page-header">
+                        <h2>Configurações</h2>
+                        <p>Informações e dados do site</p>
+                    </div>
+                    <div class="config-grid">
+                        <div class="config-card">
+                            <h3>Informações da Loja</h3>
+                            <form class="config-form" id="configLojaForm">
+                                <div class="form-group">
+                                    <label>Nome da Loja</label>
+                                    <input type="text" id="cfgNomeLoja" value="JB Acessórios">
+                                </div>
+                                <div class="form-group">
+                                    <label>Número WhatsApp</label>
+                                    <input type="text" id="cfgWhatsapp" placeholder="5543999999999">
+                                </div>
+                                <div class="form-group">
+                                    <label>Instagram</label>
+                                    <input type="text" id="cfgInstagram" placeholder="@jbacessorios_jb">
+                                </div>
+                                <div class="form-group">
+                                    <label>Endereço</label>
+                                    <input type="text" id="cfgEndereco" placeholder="Ribeirão Claro - PR">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefone</label>
+                                    <input type="text" id="cfgTelefone" placeholder="(43) 99186-4750">
+                                </div>
+                                <button type="submit" class="btn-primary">Salvar Configurações</button>
+                            </form>
+                        </div>
+                        <div class="config-card">
+                            <h3>Texto da Hero Section</h3>
+                            <form class="config-form" id="configHeroForm">
+                                <div class="form-group">
+                                    <label>Tag acima do título</label>
+                                    <input type="text" id="cfgHeroTag" value="SEMIJOIAS PREMIUM E PRATA 925">
+                                </div>
+                                <div class="form-group">
+                                    <label>Título (use * para destacar palavra)</label>
+                                    <input type="text" id="cfgHeroTitulo" value="Sua beleza merece brilho em cada *detalhe*">
+                                </div>
+                                <div class="form-group">
+                                    <label>Subtítulo</label>
+                                    <textarea id="cfgHeroSubtitulo" rows="3">Semijoias selecionadas para mulheres que valorizam estilo, qualidade e sofisticação.</textarea>
+                                </div>
+                                <button type="submit" class="btn-primary">Salvar Hero</button>
+                            </form>
+                        </div>
+                        <div class="config-card">
+                            <h3>Segurança</h3>
+                            <form class="config-form" id="configSenhaForm">
+                                <div class="form-group">
+                                    <label>Nova senha</label>
+                                    <input type="password" id="cfgNovaSenha" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirmar senha</label>
+                                    <input type="password" id="cfgConfSenha" placeholder="••••••••">
+                                </div>
+                                <button type="submit" class="btn-primary">Alterar Senha</button>
+                                <div class="form-msg" id="senhaMsg"></div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL PRODUTO -->
+    <div class="modal-overlay" id="modalProduto">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalProdutoTitle">Novo Produto</h3>
+                <button class="modal-close" data-modal="modalProduto">&#10005;</button>
+            </div>
+            <form class="modal-form" id="formProduto">
+                <input type="hidden" id="produtoId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome do Produto *</label>
+                        <input type="text" id="produtoNome" required placeholder="Ex: Brinco Aurora Dourado">
+                    </div>
+                    <div class="form-group">
+                        <label>Preço *</label>
+                        <input type="text" id="produtoPreco" required placeholder="R$ 0,00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Coleção</label>
+                        <select id="produtoColecao">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="produtoStatus">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="produtoDescricao" rows="3" placeholder="Descrição do produto..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link da imagem (URL ou nome do arquivo)</label>
+                    <input type="text" id="produtoImagem" placeholder="assets/img/produto.jpg">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-modal="modalProduto">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL COLEÇÃO -->
+    <div class="modal-overlay" id="modalColecao">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalColecaoTitle">Nova Coleção</h3>
+                <button class="modal-close" data-modal="modalColecao">&#10005;</button>
+            </div>
+            <form class="modal-form" id="formColecao">
+                <input type="hidden" id="colecaoId">
+                <div class="form-group">
+                    <label>Nome da Coleção *</label>
+                    <input type="text" id="colecaoNome" required placeholder="Ex: Brincos">
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <input type="text" id="colecaoDescricao" placeholder="Descrição breve da coleção">
+                </div>
+                <div class="form-group">
+                    <label>Link da imagem</label>
+                    <input type="text" id="colecaoImagem" placeholder="assets/img/colecao.jpg">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-modal="modalColecao">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Coleção</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DEPOIMENTO -->
+    <div class="modal-overlay" id="modalDepoimento">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalDepoimentoTitle">Novo Depoimento</h3>
+                <button class="modal-close" data-modal="modalDepoimento">&#10005;</button>
+            </div>
+            <form class="modal-form" id="formDepoimento">
+                <input type="hidden" id="depoimentoId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome do Cliente *</label>
+                        <input type="text" id="depoimentoNome" required placeholder="Ex: Marina Alves">
+                    </div>
+                    <div class="form-group">
+                        <label>Avaliação</label>
+                        <select id="depoimentoEstrelas">
+                            <option value="5">★★★★★ (5)</option>
+                            <option value="4">★★★★☆ (4)</option>
+                            <option value="3">★★★☆☆ (3)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Depoimento *</label>
+                    <textarea id="depoimentoTexto" rows="4" required placeholder="O depoimento do cliente..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-modal="modalDepoimento">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Depoimento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
