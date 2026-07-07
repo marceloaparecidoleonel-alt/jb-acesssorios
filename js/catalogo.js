@@ -5,16 +5,7 @@
 const WA_NUMBER = '5543991864750';
 
 // ---- PRODUTOS PADRÃO (fallback) ----
-const PRODUTOS_DEFAULT = [
-    { id: 'p1', nome: 'Brinco Aurora Dourado',    preco: 'R$ 89,90',  colecao: 'Brincos',    descricao: 'Brinco delicado com acabamento dourado.',    imagem: 'assets/img/product-01.svg', status: 'ativo' },
-    { id: 'p2', nome: 'Colar Lumière Prata 925',  preco: 'R$ 149,90', colecao: 'Colares',    descricao: 'Colar em prata 925 com pingente refinado.',   imagem: 'assets/img/product-02.svg', status: 'ativo' },
-    { id: 'p3', nome: 'Pulseira Elegance Gold',   preco: 'R$ 129,90', colecao: 'Pulseiras',  descricao: 'Pulseira banhada a ouro 18k, ajustável.',      imagem: 'assets/img/product-03.svg', status: 'ativo' },
-    { id: 'p4', nome: 'Anel Essenza Cristal',     preco: 'R$ 119,90', colecao: 'Anéis',      descricao: 'Traços delicados com presença luminosa.',      imagem: 'assets/img/product-04.svg', status: 'ativo' },
-    { id: 'p5', nome: 'Conjunto Serenity',        preco: 'R$ 249,90', colecao: 'Conjuntos',  descricao: 'Conjunto brinco + colar com pedras naturais.', imagem: 'assets/img/product-05.svg', status: 'ativo' },
-    { id: 'p6', nome: 'Brinco Perola Clássica',   preco: 'R$ 79,90',  colecao: 'Brincos',    descricao: 'Brinco com pérola sintética e base prateada.', imagem: 'assets/img/product-06.svg', status: 'ativo' },
-    { id: 'p7', nome: 'Colar Infinity Prata',     preco: 'R$ 139,90', colecao: 'Colares',    descricao: 'Símbolo infinito em prata 925 pura.',          imagem: 'assets/img/product-07.svg', status: 'ativo' },
-    { id: 'p8', nome: 'Pulseira Charm Rosé',      preco: 'R$ 99,90',  colecao: 'Pulseiras',  descricao: 'Pulseira rosé com detalhes em zircônia.',      imagem: 'assets/img/product-08.svg', status: 'ativo' },
-];
+const PRODUTOS_DEFAULT = [];
 
 // ---- STATE ----
 let filtroAtivo = 'todos';
