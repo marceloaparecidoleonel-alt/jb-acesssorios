@@ -15,12 +15,12 @@
    ===================================================== */
 
 const firebaseConfig = {
-    apiKey:            "COLE_SUA_API_KEY_AQUI",
-    authDomain:        "SEU_PROJETO.firebaseapp.com",
-    projectId:         "SEU_PROJETO_ID",
-    storageBucket:     "SEU_PROJETO.appspot.com",
-    messagingSenderId: "SEU_SENDER_ID",
-    appId:             "SEU_APP_ID"
+    apiKey:            "AIzaSyDCVxhF2HyGj1k5laP-M3TRieTnATIkYqw",
+    authDomain:        "jb-acessorios.firebaseapp.com",
+    projectId:         "jb-acessorios",
+    storageBucket:     "jb-acessorios.firebasestorage.app",
+    messagingSenderId: "308067390507",
+    appId:             "1:308067390507:web:5d47ed6becf5ab0cad466e"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -28,5 +28,5 @@ firebase.initializeApp(firebaseConfig);
 const db   = firebase.firestore();
 const auth = firebase.auth();
 
-// Email fixo do admin (pode trocar para o que criou no Firebase)
+// Email fixo do admin (o mesmo que cadastrou no Firebase Authentication)
 const ADMIN_EMAIL = 'admin@jbacessorios.com';
