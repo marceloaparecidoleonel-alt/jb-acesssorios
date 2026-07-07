@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "5500000000000";
+const WHATSAPP_NUMBER = "5543991864750";
 
 const selectors = {
     header: document.getElementById("header"),

@@ -2,7 +2,7 @@
    JB Acessórios - Catálogo Page JS
    ======================================== */
 
-const WA_NUMBER = '554399186475';
+const WA_NUMBER = '5543991864750';
 
 // ---- PRODUTOS PADRÃO (fallback) ----
 const PRODUTOS_DEFAULT = [

@@ -38,7 +38,7 @@ function initDefaultData() {
         writeData('config.json', {
             adminSenha: 'jb2026',
             nomeLoja:   'JB Acessórios',
-            whatsapp:   '554399186475',
+            whatsapp:   '5543991864750',
             instagram:  '@jbacessorios_jb',
             endereco:   'Ribeirão Claro - PR',
             telefone:   '(43) 99186-4750',

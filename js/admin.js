@@ -361,7 +361,7 @@ async function deleteDepoimento(id) {
 async function renderConfiguracoes() {
     const cfg = await fsGetConfig() || {};
     document.getElementById('cfgNomeLoja').value      = cfg.nomeLoja      || 'JB Acessórios';
-    document.getElementById('cfgWhatsapp').value      = cfg.whatsapp      || '554399186475';
+    document.getElementById('cfgWhatsapp').value      = cfg.whatsapp      || '5543991864750';
     document.getElementById('cfgInstagram').value     = cfg.instagram     || '@jbacessorios_jb';
     document.getElementById('cfgEndereco').value      = cfg.endereco      || 'Ribeirão Claro - PR';
     document.getElementById('cfgTelefone').value      = cfg.telefone      || '(43) 99186-4750';
