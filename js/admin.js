@@ -55,46 +55,49 @@ function setBtnLoading(btn, loading, label) {
     btn.textContent = loading ? 'Salvando...' : label;
 }
 
-// ---- FIREBASE STORAGE UPLOAD ----
+// ---- CLOUDINARY UPLOAD ----
 async function uploadImagem(file, path = 'produtos', progressIds = {}) {
-    const ext  = file.name.split('.').pop().toLowerCase();
-    const nome = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const ref  = storage.ref(`${path}/${nome}`);
-
     const progress = document.getElementById(progressIds.progress || 'imgUploadProgress');
     const bar      = document.getElementById(progressIds.bar || 'imgProgressBar');
     const text     = document.getElementById(progressIds.text || 'imgProgressText');
     if (progress) progress.style.display = 'flex';
 
-    return new Promise((resolve, reject) => {
-        const task    = ref.put(file);
-        const timeout = setTimeout(() => {
-            task.cancel();
-            if (progress) progress.style.display = 'none';
-            if (bar) bar.style.width = '0';
-            reject(new Error('timeout'));
-        }, 20000);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+    formData.append('folder', CLOUDINARY_CONFIG.folder);
 
-        task.on('state_changed',
-            snap => {
-                const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
+
+        xhr.upload.addEventListener('progress', e => {
+            if (e.lengthComputable) {
+                const pct = Math.round((e.loaded / e.total) * 100);
                 if (bar)  bar.style.width  = pct + '%';
                 if (text) text.textContent = `Enviando ${pct}%...`;
-            },
-            err => {
-                clearTimeout(timeout);
-                if (progress) progress.style.display = 'none';
-                if (bar) bar.style.width = '0';
-                reject(err);
-            },
-            async () => {
-                clearTimeout(timeout);
-                const url = await task.snapshot.ref.getDownloadURL();
-                if (progress) progress.style.display = 'none';
-                if (bar) bar.style.width = '0';
-                resolve(url);
             }
-        );
+        });
+
+        xhr.addEventListener('load', () => {
+            if (progress) progress.style.display = 'none';
+            if (bar) bar.style.width = '0';
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                resolve(response.secure_url);
+            } else {
+                reject(new Error('Upload falhou'));
+            }
+        });
+
+        xhr.addEventListener('error', () => {
+            if (progress) progress.style.display = 'none';
+            if (bar) bar.style.width = '0';
+            reject(new Error('Erro de rede'));
+        });
+
+        xhr.open('POST', url);
+        xhr.send(formData);
     });
 }
 
