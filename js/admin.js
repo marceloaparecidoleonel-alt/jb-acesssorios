@@ -430,26 +430,100 @@ async function openModalColecao(id = null) {
         document.getElementById('colecaoId').value        = c.id;
         document.getElementById('colecaoNome').value      = c.nome;
         document.getElementById('colecaoDescricao').value = c.descricao || '';
-        document.getElementById('colecaoImagem').value    = c.imagem || '';
+        document.getElementById('colecaoImagem').value     = c.imagem || '';
+        document.getElementById('colecaoImagemFile').value = '';
+        document.getElementById('colecaoImagemUrl').value  = '';
+        updateImagePreviewColecao(c.imagem || '');
     } else {
         title.textContent = 'Nova Coleção';
         form.reset();
-        document.getElementById('colecaoId').value = '';
+        document.getElementById('colecaoId').value    = '';
+        document.getElementById('colecaoImagem').value = '';
+        document.getElementById('colecaoImagemFile').value = '';
+        document.getElementById('colecaoImagemUrl').value  = '';
+        updateImagePreviewColecao('');
     }
+    document.getElementById('urlFallbackGroupColecao').style.display = 'none';
     modal.classList.add('open');
 }
 
+function updateImagePreviewColecao(url) {
+    const prev        = document.getElementById('colecaoImagemPreview');
+    const placeholder = document.getElementById('imgUploadPlaceholderColecao');
+    if (!prev) return;
+    if (url && url.trim()) {
+        prev.src              = url.trim();
+        prev.style.display    = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        prev.onerror = () => {
+            prev.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'flex';
+        };
+    } else {
+        prev.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'flex';
+    }
+}
+
+document.getElementById('imgUploadAreaColecao').addEventListener('click', () => {
+    document.getElementById('colecaoImagemFile').click();
+});
+
+document.getElementById('colecaoImagemFile').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+        showToast('Imagem muito grande. Use até 5MB.');
+        e.target.value = '';
+        return;
+    }
+    document.getElementById('colecaoImagemUrl').value = '';
+    const reader = new FileReader();
+    reader.onload = ev => updateImagePreviewColecao(ev.target.result);
+    reader.readAsDataURL(file);
+});
+
+document.getElementById('btnToggleUrlColecao').addEventListener('click', () => {
+    const group = document.getElementById('urlFallbackGroupColecao');
+    group.style.display = group.style.display === 'none' ? 'block' : 'none';
+});
+
+document.getElementById('colecaoImagemUrl').addEventListener('input', e => {
+    const url = e.target.value.trim();
+    document.getElementById('colecaoImagem').value = url;
+    document.getElementById('colecaoImagemFile').value = '';
+    updateImagePreviewColecao(url);
+});
+
 document.getElementById('formColecao').addEventListener('submit', async e => {
     e.preventDefault();
-    const btn = e.target.querySelector('[type=submit]');
-    const id  = document.getElementById('colecaoId').value;
-    const data = {
-        nome:      document.getElementById('colecaoNome').value.trim(),
-        descricao: document.getElementById('colecaoDescricao').value.trim(),
-        imagem:    document.getElementById('colecaoImagem').value.trim(),
-    };
-    setBtnLoading(btn, true, 'Salvar Coleção');
+    const btn       = e.target.querySelector('[type=submit]');
+    const id        = document.getElementById('colecaoId').value;
+    const fileInput = document.getElementById('colecaoImagemFile');
+    btn.disabled = true;
     try {
+        let imagemUrl = document.getElementById('colecaoImagem').value.trim()
+                     || document.getElementById('colecaoImagemUrl').value.trim();
+
+        if (fileInput.files[0]) {
+            btn.textContent = 'Enviando imagem...';
+            try {
+                imagemUrl = await uploadImagem(fileInput.files[0]);
+            } catch (uploadErr) {
+                console.error('Upload falhou:', uploadErr);
+                setBtnLoading(btn, false, 'Salvar Coleção');
+                document.getElementById('urlFallbackGroupColecao').style.display = 'block';
+                showToast('Upload falhou. Ative o Firebase Storage ou cole uma URL abaixo.');
+                return;
+            }
+        }
+
+        btn.textContent = 'Salvando...';
+        const data = {
+            nome:      document.getElementById('colecaoNome').value.trim(),
+            descricao: document.getElementById('colecaoDescricao').value.trim(),
+            imagem:    imagemUrl,
+        };
         if (id) { await fsUpdate('colecoes', id, data); showToast('Coleção atualizada!', 'gold'); }
         else    { await fsAdd('colecoes', data);         showToast('Coleção adicionada!', 'gold'); }
         clearCache('colecoes');
