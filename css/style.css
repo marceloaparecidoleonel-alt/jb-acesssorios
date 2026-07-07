@@ -439,10 +439,12 @@ button {
 }
 
 .infobar {
-    background: var(--color-blue-dark);
+    background: var(--color-white);
     padding: 0;
     position: relative;
     overflow: hidden;
+    border-top: 1px solid rgba(197,168,128,0.18);
+    border-bottom: 1px solid rgba(197,168,128,0.18);
 }
 
 .infobar::before {
@@ -450,8 +452,8 @@ button {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 0% 50%, rgba(197,168,128,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse at 100% 50%, rgba(197,168,128,0.05) 0%, transparent 55%);
+        radial-gradient(ellipse at 0% 50%, rgba(197,168,128,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 50%, rgba(197,168,128,0.04) 0%, transparent 55%);
     pointer-events: none;
 }
 
@@ -468,7 +470,7 @@ button {
     align-items: center;
     gap: 14px;
     padding: 28px 20px;
-    border-right: 1px solid rgba(197, 168, 128, 0.12);
+    border-right: 1px solid rgba(197, 168, 128, 0.2);
     transition: background var(--transition);
     cursor: default;
 }
@@ -478,7 +480,7 @@ button {
 }
 
 .infobar-card:hover {
-    background: rgba(197, 168, 128, 0.07);
+    background: #fdf8f2;
 }
 
 .infobar-card:hover .infobar-icon-wrap {
@@ -487,11 +489,11 @@ button {
 
 .infobar-icon-wrap {
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: rgba(197, 168, 128, 0.12);
-    border: 1px solid rgba(197, 168, 128, 0.25);
+    background: rgba(197, 168, 128, 0.1);
+    border: 1px solid rgba(197, 168, 128, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -501,8 +503,8 @@ button {
 .infobar-icon {
     width: 18px;
     height: 18px;
-    filter: brightness(0) saturate(100%) invert(82%) sepia(20%) saturate(500%) hue-rotate(5deg) brightness(100%);
-    opacity: 0.9;
+    filter: brightness(0) saturate(100%) invert(72%) sepia(30%) saturate(400%) hue-rotate(5deg) brightness(95%);
+    opacity: 1;
 }
 
 .infobar-text {
@@ -517,7 +519,7 @@ button {
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-gold);
+    color: var(--color-blue-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -525,8 +527,8 @@ button {
 
 .infobar-subtitle {
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 300;
+    color: var(--color-gray);
+    font-weight: 400;
     letter-spacing: 0.02em;
     white-space: nowrap;
     overflow: hidden;
