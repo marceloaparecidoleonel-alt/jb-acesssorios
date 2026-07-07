@@ -129,7 +129,7 @@
                                 <a href="#" class="link-gold" data-page="produtos">Ver todos</a>
                             </div>
                             <table class="mini-table" id="dashProdutosTable">
-                                <thead><tr><th>Nome</th><th>Preço</th><th>Coleção</th></tr></thead>
+                                <thead><tr><th>Nome</th><th>Preço</th><th>Coleção</th><th>Status</th></tr></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
@@ -167,6 +167,7 @@
                                     <th>Coleção</th>
                                     <th>Preço</th>
                                     <th>Descrição</th>
+                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -314,8 +315,9 @@
                     <textarea id="produtoDescricao" rows="3" placeholder="Descrição do produto..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Link da imagem (URL ou nome do arquivo)</label>
-                    <input type="text" id="produtoImagem" placeholder="assets/img/produto.jpg">
+                    <label>Link da imagem (URL)</label>
+                    <input type="text" id="produtoImagem" placeholder="https://... ou assets/img/produto.jpg">
+                    <img id="produtoImagemPreview" src="" alt="Preview" style="display:none;max-width:100%;max-height:120px;border-radius:8px;margin-top:8px;object-fit:cover;">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" data-modal="modalProduto">Cancelar</button>

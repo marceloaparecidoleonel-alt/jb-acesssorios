@@ -831,3 +831,44 @@ body.admin-body {
     .stats-grid { grid-template-columns: 1fr; }
     .search-input { width: 100%; }
 }
+
+/* ---- STATUS BADGE ---- */
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.status-badge.ativo    { background: #d1fae5; color: #065f46; }
+.status-badge.inativo  { background: #fee2e2; color: #991b1b; }
+
+/* ---- THUMBNAILS ---- */
+.img-thumb {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+}
+
+.col-thumb {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+/* ---- LOADING ROW ---- */
+.loading-row {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 24px;
+    font-size: 0.875rem;
+    font-style: italic;
+}
