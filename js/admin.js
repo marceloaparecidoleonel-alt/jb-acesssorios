@@ -63,7 +63,14 @@ async function uploadImagem(file) {
     if (progress) progress.style.display = 'flex';
 
     return new Promise((resolve, reject) => {
-        const task = ref.put(file);
+        const task    = ref.put(file);
+        const timeout = setTimeout(() => {
+            task.cancel();
+            if (progress) progress.style.display = 'none';
+            if (bar) bar.style.width = '0';
+            reject(new Error('timeout'));
+        }, 20000);
+
         task.on('state_changed',
             snap => {
                 const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
@@ -71,13 +78,16 @@ async function uploadImagem(file) {
                 if (text) text.textContent = `Enviando ${pct}%...`;
             },
             err => {
+                clearTimeout(timeout);
                 if (progress) progress.style.display = 'none';
+                if (bar) bar.style.width = '0';
                 reject(err);
             },
             async () => {
+                clearTimeout(timeout);
                 const url = await task.snapshot.ref.getDownloadURL();
                 if (progress) progress.style.display = 'none';
-                if (bar)  bar.style.width = '0';
+                if (bar) bar.style.width = '0';
                 resolve(url);
             }
         );
@@ -246,7 +256,11 @@ async function openModalProduto(id = null) {
     const form   = document.getElementById('formProduto');
     const select = document.getElementById('produtoColecao');
     const cols   = await getColecoes();
-    select.innerHTML = '<option value="">Selecione...</option>' + cols.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+    if (cols.length) {
+        select.innerHTML = '<option value="">Selecione...</option>' + cols.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+    } else {
+        select.innerHTML = '<option value="">(nenhuma coleção cadastrada)</option>';
+    }
     if (id) {
         const p = (await getProdutos()).find(x => x.id === id);
         if (!p) return;
@@ -266,8 +280,10 @@ async function openModalProduto(id = null) {
         document.getElementById('produtoId').value    = '';
         document.getElementById('produtoImagem').value = '';
         document.getElementById('produtoImagemFile').value = '';
+        document.getElementById('produtoImagemUrl').value  = '';
         updateImagePreview('');
     }
+    document.getElementById('urlFallbackGroup').style.display = 'none';
     modal.classList.add('open');
 }
 
@@ -301,9 +317,22 @@ document.getElementById('produtoImagemFile').addEventListener('change', e => {
         e.target.value = '';
         return;
     }
+    document.getElementById('produtoImagemUrl').value = '';
     const reader = new FileReader();
     reader.onload = ev => updateImagePreview(ev.target.result);
     reader.readAsDataURL(file);
+});
+
+document.getElementById('btnToggleUrl').addEventListener('click', () => {
+    const group = document.getElementById('urlFallbackGroup');
+    group.style.display = group.style.display === 'none' ? 'block' : 'none';
+});
+
+document.getElementById('produtoImagemUrl').addEventListener('input', e => {
+    const url = e.target.value.trim();
+    document.getElementById('produtoImagem').value = url;
+    document.getElementById('produtoImagemFile').value = '';
+    updateImagePreview(url);
 });
 
 document.getElementById('formProduto').addEventListener('submit', async e => {
@@ -313,11 +342,22 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
     const fileInput = document.getElementById('produtoImagemFile');
     btn.disabled = true;
     try {
-        let imagemUrl = document.getElementById('produtoImagem').value.trim();
+        let imagemUrl = document.getElementById('produtoImagem').value.trim()
+                     || document.getElementById('produtoImagemUrl').value.trim();
+
         if (fileInput.files[0]) {
             btn.textContent = 'Enviando imagem...';
-            imagemUrl = await uploadImagem(fileInput.files[0]);
+            try {
+                imagemUrl = await uploadImagem(fileInput.files[0]);
+            } catch (uploadErr) {
+                console.error('Upload falhou:', uploadErr);
+                setBtnLoading(btn, false, 'Salvar Produto');
+                document.getElementById('urlFallbackGroup').style.display = 'block';
+                showToast('Upload falhou. Ative o Firebase Storage ou cole uma URL abaixo.');
+                return;
+            }
         }
+
         btn.textContent = 'Salvando...';
         const data = {
             nome:      document.getElementById('produtoNome').value.trim(),
