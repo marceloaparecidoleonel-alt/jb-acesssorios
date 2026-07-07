@@ -52,14 +52,14 @@ function setBtnLoading(btn, loading, label) {
 }
 
 // ---- FIREBASE STORAGE UPLOAD ----
-async function uploadImagem(file) {
+async function uploadImagem(file, path = 'produtos', progressIds = {}) {
     const ext  = file.name.split('.').pop().toLowerCase();
     const nome = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const ref  = storage.ref(`produtos/${nome}`);
+    const ref  = storage.ref(`${path}/${nome}`);
 
-    const progress = document.getElementById('imgUploadProgress');
-    const bar      = document.getElementById('imgProgressBar');
-    const text     = document.getElementById('imgProgressText');
+    const progress = document.getElementById(progressIds.progress || 'imgUploadProgress');
+    const bar      = document.getElementById(progressIds.bar || 'imgProgressBar');
+    const text     = document.getElementById(progressIds.text || 'imgProgressText');
     if (progress) progress.style.display = 'flex';
 
     return new Promise((resolve, reject) => {
@@ -348,7 +348,11 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
         if (fileInput.files[0]) {
             btn.textContent = 'Enviando imagem...';
             try {
-                imagemUrl = await uploadImagem(fileInput.files[0]);
+                imagemUrl = await uploadImagem(fileInput.files[0], 'produtos', {
+                    progress: 'imgUploadProgress',
+                    bar: 'imgProgressBar',
+                    text: 'imgProgressText'
+                });
             } catch (uploadErr) {
                 console.error('Upload falhou:', uploadErr);
                 setBtnLoading(btn, false, 'Salvar Produto');
@@ -508,7 +512,11 @@ document.getElementById('formColecao').addEventListener('submit', async e => {
         if (fileInput.files[0]) {
             btn.textContent = 'Enviando imagem...';
             try {
-                imagemUrl = await uploadImagem(fileInput.files[0]);
+                imagemUrl = await uploadImagem(fileInput.files[0], 'colecoes', {
+                    progress: 'imgUploadProgressColecao',
+                    bar: 'imgProgressBarColecao',
+                    text: 'imgProgressTextColecao'
+                });
             } catch (uploadErr) {
                 console.error('Upload falhou:', uploadErr);
                 setBtnLoading(btn, false, 'Salvar Coleção');
