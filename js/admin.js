@@ -1,35 +1,42 @@
 /* ========================================
-   JB Acessórios - Admin Panel JS (API)
+   JB Acessórios - Admin Panel JS (Firebase)
    ======================================== */
 
-const API = '';
-let TOKEN = sessionStorage.getItem('jb_token') || '';
+// ---- FIRESTORE HELPERS ----
+async function fsGetAll(colecao) {
+    const snap = await db.collection(colecao).orderBy('__name__').get();
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
 
-// Cache local para evitar múltiplas requisições
+async function fsAdd(colecao, data) {
+    const ref = await db.collection(colecao).add(data);
+    return { id: ref.id, ...data };
+}
+
+async function fsUpdate(colecao, id, data) {
+    await db.collection(colecao).doc(id).update(data);
+}
+
+async function fsDelete(colecao, id) {
+    await db.collection(colecao).doc(id).delete();
+}
+
+async function fsGetConfig() {
+    const doc = await db.collection('config').doc('site').get();
+    return doc.exists ? doc.data() : {};
+}
+
+async function fsSetConfig(data) {
+    await db.collection('config').doc('site').set(data, { merge: true });
+}
+
+// ---- CACHED DATA ----
 let _cache = { produtos: null, colecoes: null, depoimentos: null };
 function clearCache() { _cache = { produtos: null, colecoes: null, depoimentos: null }; }
 
-// ---- HTTP HELPERS ----
-async function api(method, endpoint, body = null) {
-    const opts = {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` }
-    };
-    if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(API + endpoint, opts);
-    if (res.status === 401) { forceLogout(); return null; }
-    return res.ok ? res.json() : null;
-}
-
-async function GET(ep)          { return api('GET', ep); }
-async function POST(ep, body)   { return api('POST', ep, body); }
-async function PUT(ep, body)    { return api('PUT', ep, body); }
-async function DEL(ep)          { return api('DELETE', ep); }
-
-// ---- CACHED DATA ----
-async function getProdutos()    { if (!_cache.produtos)    _cache.produtos    = await GET('/api/produtos');    return _cache.produtos    || []; }
-async function getColecoes()    { if (!_cache.colecoes)    _cache.colecoes    = await GET('/api/colecoes');    return _cache.colecoes    || []; }
-async function getDepoimentos() { if (!_cache.depoimentos) _cache.depoimentos = await GET('/api/depoimentos'); return _cache.depoimentos || []; }
+async function getProdutos()    { if (!_cache.produtos)    _cache.produtos    = await fsGetAll('produtos');    return _cache.produtos    || []; }
+async function getColecoes()    { if (!_cache.colecoes)    _cache.colecoes    = await fsGetAll('colecoes');    return _cache.colecoes    || []; }
+async function getDepoimentos() { if (!_cache.depoimentos) _cache.depoimentos = await fsGetAll('depoimentos'); return _cache.depoimentos || []; }
 
 // ---- LOGIN ----
 const loginForm   = document.getElementById('loginForm');
@@ -41,26 +48,17 @@ loginForm.addEventListener('submit', async e => {
     e.preventDefault();
     const usuario = document.getElementById('loginUser').value.trim();
     const senha   = document.getElementById('loginPass').value;
-    const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuario, senha })
-    });
-    if (res.ok) {
-        const data = await res.json();
-        TOKEN = data.token;
-        sessionStorage.setItem('jb_token', TOKEN);
-        loginScreen.style.display = 'none';
-        adminLayout.style.display = 'flex';
-        initAdmin();
-    } else {
+    // Mapeia usuario para email ("admin" → ADMIN_EMAIL definido em firebase-config.js)
+    const email = usuario.includes('@') ? usuario : ADMIN_EMAIL;
+    try {
+        await auth.signInWithEmailAndPassword(email, senha);
+        // onAuthStateChanged vai cuidar do resto
+    } catch {
         loginError.classList.add('show');
     }
 });
 
 function forceLogout() {
-    TOKEN = '';
-    sessionStorage.removeItem('jb_token');
     adminLayout.style.display = 'none';
     loginScreen.style.display = 'flex';
     document.getElementById('loginUser').value = '';
@@ -68,16 +66,20 @@ function forceLogout() {
 }
 
 document.getElementById('btnLogout').addEventListener('click', async () => {
-    await POST('/api/logout');
-    forceLogout();
+    await auth.signOut();
 });
 
-// Auto-login se token salvo for válido
-async function tryAutoLogin() {
-    if (!TOKEN) return false;
-    const res = await fetch('/api/me', { headers: { 'Authorization': `Bearer ${TOKEN}` } });
-    return res.ok;
-}
+// Observa mudanças de autenticação
+auth.onAuthStateChanged(user => {
+    if (user) {
+        loginScreen.style.display = 'none';
+        adminLayout.style.display = 'flex';
+        loginError.classList.remove('show');
+        initAdmin();
+    } else {
+        forceLogout();
+    }
+});
 
 // ---- NAVIGATION ----
 const navItems   = document.querySelectorAll('.nav-item');
@@ -204,8 +206,8 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
         imagem:    document.getElementById('produtoImagem').value.trim(),
         status:    document.getElementById('produtoStatus').value,
     };
-    if (id) { await PUT(`/api/produtos/${id}`, data); showToast('Produto atualizado!', 'gold'); }
-    else    { await POST('/api/produtos', data);       showToast('Produto adicionado!', 'gold'); }
+    if (id) { await fsUpdate('produtos', id, data); showToast('Produto atualizado!', 'gold'); }
+    else    { await fsAdd('produtos', data);          showToast('Produto adicionado!', 'gold'); }
     _cache.produtos = null;
     closeModal('modalProduto');
     await renderProdutos();
@@ -215,7 +217,7 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
 function editProduto(id) { openModalProduto(id); }
 async function deleteProduto(id) {
     if (!confirm('Excluir este produto?')) return;
-    await DEL(`/api/produtos/${id}`);
+    await fsDelete('produtos', id);
     _cache.produtos = null;
     await renderProdutos();
     await renderDashboard();
@@ -270,8 +272,8 @@ document.getElementById('formColecao').addEventListener('submit', async e => {
         descricao: document.getElementById('colecaoDescricao').value.trim(),
         imagem:    document.getElementById('colecaoImagem').value.trim(),
     };
-    if (id) { await PUT(`/api/colecoes/${id}`, data); showToast('Coleção atualizada!', 'gold'); }
-    else    { await POST('/api/colecoes', data);       showToast('Coleção adicionada!', 'gold'); }
+    if (id) { await fsUpdate('colecoes', id, data); showToast('Coleção atualizada!', 'gold'); }
+    else    { await fsAdd('colecoes', data);          showToast('Coleção adicionada!', 'gold'); }
     _cache.colecoes = null;
     closeModal('modalColecao');
     await renderColecoes();
@@ -281,7 +283,7 @@ document.getElementById('formColecao').addEventListener('submit', async e => {
 function editColecao(id) { openModalColecao(id); }
 async function deleteColecao(id) {
     if (!confirm('Excluir esta coleção?')) return;
-    await DEL(`/api/colecoes/${id}`);
+    await fsDelete('colecoes', id);
     _cache.colecoes = null;
     await renderColecoes();
     await renderDashboard();
@@ -337,8 +339,8 @@ document.getElementById('formDepoimento').addEventListener('submit', async e => 
         texto:    document.getElementById('depoimentoTexto').value.trim(),
         estrelas: parseInt(document.getElementById('depoimentoEstrelas').value),
     };
-    if (id) { await PUT(`/api/depoimentos/${id}`, data); showToast('Depoimento atualizado!', 'gold'); }
-    else    { await POST('/api/depoimentos', data);       showToast('Depoimento adicionado!', 'gold'); }
+    if (id) { await fsUpdate('depoimentos', id, data); showToast('Depoimento atualizado!', 'gold'); }
+    else    { await fsAdd('depoimentos', data);          showToast('Depoimento adicionado!', 'gold'); }
     _cache.depoimentos = null;
     closeModal('modalDepoimento');
     await renderDepoimentos();
@@ -348,7 +350,7 @@ document.getElementById('formDepoimento').addEventListener('submit', async e => 
 function editDepoimento(id) { openModalDepoimento(id); }
 async function deleteDepoimento(id) {
     if (!confirm('Excluir este depoimento?')) return;
-    await DEL(`/api/depoimentos/${id}`);
+    await fsDelete('depoimentos', id);
     _cache.depoimentos = null;
     await renderDepoimentos();
     await renderDashboard();
@@ -357,7 +359,7 @@ async function deleteDepoimento(id) {
 
 // ---- CONFIGURAÇÕES ----
 async function renderConfiguracoes() {
-    const cfg = await GET('/api/config') || {};
+    const cfg = await fsGetConfig() || {};
     document.getElementById('cfgNomeLoja').value      = cfg.nomeLoja      || 'JB Acessórios';
     document.getElementById('cfgWhatsapp').value      = cfg.whatsapp      || '554399186475';
     document.getElementById('cfgInstagram').value     = cfg.instagram     || '@jbacessorios_jb';
@@ -370,7 +372,7 @@ async function renderConfiguracoes() {
 
 document.getElementById('configLojaForm').addEventListener('submit', async e => {
     e.preventDefault();
-    await PUT('/api/config', {
+    await fsSetConfig({
         nomeLoja:  document.getElementById('cfgNomeLoja').value.trim(),
         whatsapp:  document.getElementById('cfgWhatsapp').value.trim(),
         instagram: document.getElementById('cfgInstagram').value.trim(),
@@ -382,7 +384,7 @@ document.getElementById('configLojaForm').addEventListener('submit', async e => 
 
 document.getElementById('configHeroForm').addEventListener('submit', async e => {
     e.preventDefault();
-    await PUT('/api/config', {
+    await fsSetConfig({
         heroTag:       document.getElementById('cfgHeroTag').value.trim(),
         heroTitulo:    document.getElementById('cfgHeroTitulo').value.trim(),
         heroSubtitulo: document.getElementById('cfgHeroSubtitulo').value.trim(),
@@ -397,12 +399,15 @@ document.getElementById('configSenhaForm').addEventListener('submit', async e =>
     const msg  = document.getElementById('senhaMsg');
     if (nova.length < 6) { msg.textContent = 'A senha deve ter ao menos 6 caracteres.'; msg.className = 'form-msg error'; return; }
     if (nova !== conf)   { msg.textContent = 'As senhas não coincidem.';                msg.className = 'form-msg error'; return; }
-    const res = await PUT('/api/config/senha', { novaSenha: nova });
-    if (res) {
+    try {
+        await auth.currentUser.updatePassword(nova);
         msg.textContent = 'Senha alterada com sucesso!';
         msg.className = 'form-msg success';
         document.getElementById('configSenhaForm').reset();
         setTimeout(() => { msg.className = 'form-msg'; }, 3000);
+    } catch {
+        msg.textContent = 'Erro ao alterar senha. Faça login novamente.';
+        msg.className = 'form-msg error';
     }
 });
 
@@ -429,18 +434,3 @@ function showToast(msg, type = '') {
 async function initAdmin() {
     navigateTo('dashboard');
 }
-
-// ---- BOOT ----
-(async () => {
-    if (TOKEN) {
-        const valid = await tryAutoLogin();
-        if (valid) {
-            loginScreen.style.display = 'none';
-            adminLayout.style.display = 'flex';
-            initAdmin();
-            return;
-        }
-        TOKEN = '';
-        sessionStorage.removeItem('jb_token');
-    }
-})();

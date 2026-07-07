@@ -32,10 +32,13 @@ async function init() {
 
 async function carregarProdutos() {
     try {
-        const res = await fetch('/api/site/produtos');
-        if (res.ok) {
-            const data = await res.json();
-            if (data && data.length > 0) return data;
+        if (typeof db !== 'undefined') {
+            const snap = await db.collection('produtos')
+                .where('status', '!=', 'inativo')
+                .get();
+            if (!snap.empty) {
+                return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            }
         }
     } catch { /* fallback */ }
     return PRODUTOS_DEFAULT;
