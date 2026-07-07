@@ -2,6 +2,10 @@
    JB Acessórios - Admin Panel JS (Firebase)
    ======================================== */
 
+// ---- LIMITES GRATUITOS ----
+const MAX_PRODUTOS = 50;
+const MAX_COLECOES = 20;
+
 // ---- FIRESTORE HELPERS ----
 async function fsGetAll(colecao) {
     try {
@@ -371,6 +375,16 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
             imagem:    imagemUrl,
             status:    document.getElementById('produtoStatus').value,
         };
+
+        if (!id) {
+            const produtos = await getProdutos();
+            if (produtos.length >= MAX_PRODUTOS) {
+                showToast(`Limite de ${MAX_PRODUTOS} produtos atingido. Exclua ou edite produtos existentes.`);
+                setBtnLoading(btn, false, 'Salvar Produto');
+                return;
+            }
+        }
+
         if (id) { await fsUpdate('produtos', id, data); showToast('Produto atualizado!', 'gold'); }
         else    { await fsAdd('produtos', data);         showToast('Produto adicionado!', 'gold'); }
         clearCache('produtos');
@@ -532,6 +546,16 @@ document.getElementById('formColecao').addEventListener('submit', async e => {
             descricao: document.getElementById('colecaoDescricao').value.trim(),
             imagem:    imagemUrl,
         };
+
+        if (!id) {
+            const colecoes = await getColecoes();
+            if (colecoes.length >= MAX_COLECOES) {
+                showToast(`Limite de ${MAX_COLECOES} coleções atingido. Exclua ou edite coleções existentes.`);
+                setBtnLoading(btn, false, 'Salvar Coleção');
+                return;
+            }
+        }
+
         if (id) { await fsUpdate('colecoes', id, data); showToast('Coleção atualizada!', 'gold'); }
         else    { await fsAdd('colecoes', data);         showToast('Coleção adicionada!', 'gold'); }
         clearCache('colecoes');
