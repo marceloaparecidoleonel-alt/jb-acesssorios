@@ -439,63 +439,98 @@ button {
 }
 
 .infobar {
-    background: var(--color-white);
-    padding: 48px 0;
-    border-top: 1px solid rgba(197, 168, 128, 0.2);
-    border-bottom: 1px solid rgba(197, 168, 128, 0.2);
+    background: var(--color-blue-dark);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.infobar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 0% 50%, rgba(197,168,128,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 50%, rgba(197,168,128,0.05) 0%, transparent 55%);
+    pointer-events: none;
 }
 
 .infobar-content {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 1px;
-    background: rgba(197, 168, 128, 0.2);
-    border: 1px solid rgba(197, 168, 128, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 .infobar-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
-    gap: 10px;
-    padding: 32px 20px;
-    background: var(--color-white);
+    gap: 14px;
+    padding: 28px 20px;
+    border-right: 1px solid rgba(197, 168, 128, 0.12);
     transition: background var(--transition);
+    cursor: default;
+}
+
+.infobar-card:last-child {
+    border-right: none;
 }
 
 .infobar-card:hover {
-    background: #fdf8f2;
+    background: rgba(197, 168, 128, 0.07);
 }
 
-.infobar-card::before {
-    content: "—";
-    color: var(--color-gold);
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    opacity: 0.7;
+.infobar-card:hover .infobar-icon-wrap {
+    transform: scale(1.1);
+}
+
+.infobar-icon-wrap {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(197, 168, 128, 0.12);
+    border: 1px solid rgba(197, 168, 128, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition);
+}
+
+.infobar-icon {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) saturate(100%) invert(82%) sepia(20%) saturate(500%) hue-rotate(5deg) brightness(100%);
+    opacity: 0.9;
 }
 
 .infobar-text {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 3px;
+    min-width: 0;
 }
 
 .infobar-title {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-gold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .infobar-subtitle {
-    font-size: 0.75rem;
-    color: var(--color-gray);
-    font-weight: 400;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .scroll-indicator,
