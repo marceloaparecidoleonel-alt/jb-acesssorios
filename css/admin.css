@@ -832,6 +832,64 @@ body.admin-body {
     .search-input { width: 100%; }
 }
 
+/* ---- IMAGE UPLOAD AREA ---- */
+.img-upload-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    overflow: hidden;
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition), background var(--transition);
+    position: relative;
+    background: var(--bg);
+}
+.img-upload-area:hover { border-color: var(--gold); background: #fffdf5; }
+
+.img-upload-area img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: none;
+}
+
+.img-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 24px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+.img-upload-placeholder .upload-icon { font-size: 2rem; line-height: 1; }
+.img-upload-placeholder p  { font-size: 0.875rem; font-weight: 500; margin: 0; color: var(--text); }
+.img-upload-placeholder span { font-size: 0.75rem; }
+
+.img-upload-progress {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.progress-bar-track {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    height: 100%;
+    width: 0;
+    background: var(--gold);
+    border-radius: 3px;
+    transition: width 0.15s ease;
+}
+#imgProgressText { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+
 /* ---- STATUS BADGE ---- */
 .status-badge {
     display: inline-block;

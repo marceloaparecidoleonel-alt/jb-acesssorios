@@ -51,6 +51,39 @@ function setBtnLoading(btn, loading, label) {
     btn.textContent = loading ? 'Salvando...' : label;
 }
 
+// ---- FIREBASE STORAGE UPLOAD ----
+async function uploadImagem(file) {
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const nome = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const ref  = storage.ref(`produtos/${nome}`);
+
+    const progress = document.getElementById('imgUploadProgress');
+    const bar      = document.getElementById('imgProgressBar');
+    const text     = document.getElementById('imgProgressText');
+    if (progress) progress.style.display = 'flex';
+
+    return new Promise((resolve, reject) => {
+        const task = ref.put(file);
+        task.on('state_changed',
+            snap => {
+                const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                if (bar)  bar.style.width  = pct + '%';
+                if (text) text.textContent = `Enviando ${pct}%...`;
+            },
+            err => {
+                if (progress) progress.style.display = 'none';
+                reject(err);
+            },
+            async () => {
+                const url = await task.snapshot.ref.getDownloadURL();
+                if (progress) progress.style.display = 'none';
+                if (bar)  bar.style.width = '0';
+                resolve(url);
+            }
+        );
+    });
+}
+
 // ---- LOGIN ----
 const loginForm   = document.getElementById('loginForm');
 const loginError  = document.getElementById('loginError');
@@ -222,47 +255,78 @@ async function openModalProduto(id = null) {
         document.getElementById('produtoNome').value      = p.nome;
         document.getElementById('produtoPreco').value     = p.preco;
         document.getElementById('produtoDescricao').value = p.descricao || '';
-        document.getElementById('produtoImagem').value    = p.imagem || '';
-        document.getElementById('produtoStatus').value    = p.status || 'ativo';
+        document.getElementById('produtoImagem').value     = p.imagem || '';
+        document.getElementById('produtoStatus').value     = p.status || 'ativo';
+        document.getElementById('produtoImagemFile').value = '';
         select.value = p.colecao || '';
         updateImagePreview(p.imagem || '');
     } else {
         title.textContent = 'Novo Produto';
         form.reset();
-        document.getElementById('produtoId').value = '';
+        document.getElementById('produtoId').value    = '';
+        document.getElementById('produtoImagem').value = '';
+        document.getElementById('produtoImagemFile').value = '';
         updateImagePreview('');
     }
     modal.classList.add('open');
 }
 
 function updateImagePreview(url) {
-    const prev = document.getElementById('produtoImagemPreview');
+    const prev        = document.getElementById('produtoImagemPreview');
+    const placeholder = document.getElementById('imgUploadPlaceholder');
     if (!prev) return;
     if (url && url.trim()) {
-        prev.src   = url.trim();
-        prev.style.display = 'block';
-        prev.onerror = () => { prev.style.display = 'none'; };
+        prev.src              = url.trim();
+        prev.style.display    = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        prev.onerror = () => {
+            prev.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'flex';
+        };
     } else {
         prev.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'flex';
     }
 }
 
-document.getElementById('produtoImagem').addEventListener('input', e => updateImagePreview(e.target.value));
+document.getElementById('imgUploadArea').addEventListener('click', () => {
+    document.getElementById('produtoImagemFile').click();
+});
+
+document.getElementById('produtoImagemFile').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+        showToast('Imagem muito grande. Use até 5MB.');
+        e.target.value = '';
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => updateImagePreview(ev.target.result);
+    reader.readAsDataURL(file);
+});
 
 document.getElementById('formProduto').addEventListener('submit', async e => {
     e.preventDefault();
-    const btn = e.target.querySelector('[type=submit]');
-    const id  = document.getElementById('produtoId').value;
-    const data = {
-        nome:      document.getElementById('produtoNome').value.trim(),
-        preco:     document.getElementById('produtoPreco').value.trim(),
-        colecao:   document.getElementById('produtoColecao').value,
-        descricao: document.getElementById('produtoDescricao').value.trim(),
-        imagem:    document.getElementById('produtoImagem').value.trim(),
-        status:    document.getElementById('produtoStatus').value,
-    };
-    setBtnLoading(btn, true, 'Salvar Produto');
+    const btn       = e.target.querySelector('[type=submit]');
+    const id        = document.getElementById('produtoId').value;
+    const fileInput = document.getElementById('produtoImagemFile');
+    btn.disabled = true;
     try {
+        let imagemUrl = document.getElementById('produtoImagem').value.trim();
+        if (fileInput.files[0]) {
+            btn.textContent = 'Enviando imagem...';
+            imagemUrl = await uploadImagem(fileInput.files[0]);
+        }
+        btn.textContent = 'Salvando...';
+        const data = {
+            nome:      document.getElementById('produtoNome').value.trim(),
+            preco:     document.getElementById('produtoPreco').value.trim(),
+            colecao:   document.getElementById('produtoColecao').value,
+            descricao: document.getElementById('produtoDescricao').value.trim(),
+            imagem:    imagemUrl,
+            status:    document.getElementById('produtoStatus').value,
+        };
         if (id) { await fsUpdate('produtos', id, data); showToast('Produto atualizado!', 'gold'); }
         else    { await fsAdd('produtos', data);         showToast('Produto adicionado!', 'gold'); }
         clearCache('produtos');

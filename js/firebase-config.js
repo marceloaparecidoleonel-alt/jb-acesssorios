@@ -25,8 +25,9 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const db   = firebase.firestore();
-const auth = firebase.auth();
+const db      = firebase.firestore();
+const auth    = firebase.auth();
+const storage = firebase.storage();
 
 // Email fixo do admin (o mesmo que cadastrou no Firebase Authentication)
 const ADMIN_EMAIL = 'admin@jbacessorios.com';

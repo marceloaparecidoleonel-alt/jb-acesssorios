@@ -315,9 +315,21 @@
                     <textarea id="produtoDescricao" rows="3" placeholder="Descrição do produto..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Link da imagem (URL)</label>
-                    <input type="text" id="produtoImagem" placeholder="https://... ou assets/img/produto.jpg">
-                    <img id="produtoImagemPreview" src="" alt="Preview" style="display:none;max-width:100%;max-height:120px;border-radius:8px;margin-top:8px;object-fit:cover;">
+                    <label>Imagem do Produto</label>
+                    <div class="img-upload-area" id="imgUploadArea">
+                        <img id="produtoImagemPreview" src="" alt="Preview">
+                        <div class="img-upload-placeholder" id="imgUploadPlaceholder">
+                            <div class="upload-icon">&#128247;</div>
+                            <p>Clique para selecionar imagem</p>
+                            <span>JPG, PNG, WEBP &bull; Máx 5MB</span>
+                        </div>
+                    </div>
+                    <input type="file" id="produtoImagemFile" accept="image/*" style="display:none">
+                    <input type="hidden" id="produtoImagem">
+                    <div class="img-upload-progress" id="imgUploadProgress" style="display:none">
+                        <div class="progress-bar-track"><div class="progress-bar-fill" id="imgProgressBar"></div></div>
+                        <span id="imgProgressText">Enviando...</span>
+                    </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" data-modal="modalProduto">Cancelar</button>
@@ -398,6 +410,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/admin.js"></script>
 </body>
