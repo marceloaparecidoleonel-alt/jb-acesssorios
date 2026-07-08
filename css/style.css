@@ -46,43 +46,47 @@ body.menu-open {
     overflow: hidden;
 }
 
-.topbar {
+.announcement-bar {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1001;
     width: 100%;
-    background: var(--color-blue-dark);
-    color: var(--color-white);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    height: 40px;
+    background: #0C2D6B;
+    overflow: hidden;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 10px 0;
 }
 
-.topbar-item {
+.announcement-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: marquee 30s linear infinite;
+}
+
+.announcement-track:hover {
+    animation-play-state: paused;
+}
+
+.announcement-content {
     display: flex;
     align-items: center;
-    gap: 6px;
     white-space: nowrap;
-    opacity: 1;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    padding: 0 40px;
 }
 
-.topbar-item.animate {
-    animation: slideAcross 4s linear forwards;
-}
-
-@keyframes slideAcross {
+@keyframes marquee {
     0% {
         transform: translateX(0);
-        opacity: 1;
     }
     100% {
-        transform: translateX(-100vw);
-        opacity: 0;
+        transform: translateX(-50%);
     }
 }
 
