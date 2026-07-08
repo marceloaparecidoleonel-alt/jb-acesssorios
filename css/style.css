@@ -172,10 +172,9 @@ button {
     min-height: 52px;
     padding: 16px 40px;
     border-radius: 2px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0.05em;
     text-decoration: none;
     transition: all var(--transition);
     cursor: pointer;
@@ -411,11 +410,11 @@ button {
 
 .hero-left h1 {
     color: var(--color-white);
-    font-family: var(--font-serif-elegant);
-    font-size: clamp(3.2rem, 6vw, 5.5rem);
-    font-weight: 400;
+    font-family: var(--font-serif);
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 500;
     letter-spacing: -0.01em;
-    line-height: 1.1;
+    line-height: 1.15;
 }
 
 .hero-left h1 .highlight {
