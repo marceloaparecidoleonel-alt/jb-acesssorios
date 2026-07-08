@@ -7,8 +7,52 @@ const selectors = {
     navLinks: document.querySelectorAll(".nav-link"),
     revealItems: document.querySelectorAll(".reveal"),
     heroBg: document.querySelector(".hero-bg"),
-    productButtons: document.querySelectorAll(".product-whatsapp")
+    productButtons: document.querySelectorAll(".product-whatsapp"),
+    topbarItem: document.getElementById("topbarItem"),
+    topbarText: document.getElementById("topbarText")
 };
+
+const topbarItems = [
+    { icon: 'location', text: 'Loja Física em Ribeirão Claro - PR' },
+    { icon: 'gem', text: 'Prata 925 • Semijoias Premium' },
+    { icon: 'phone', text: '(43) 99186-4750' },
+    { icon: 'instagram', text: '@jbacessorios_jb' }
+];
+
+let currentTopbarIndex = 0;
+
+const topbarIcons = {
+    location: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+    gem: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"></path></svg>`,
+    phone: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`,
+    instagram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`
+};
+
+function rotateTopbar() {
+    if (!selectors.topbarItem || !selectors.topbarText) return;
+
+    selectors.topbarItem.classList.add('fade-out');
+
+    setTimeout(() => {
+        currentTopbarIndex = (currentTopbarIndex + 1) % topbarItems.length;
+        const item = topbarItems[currentTopbarIndex];
+
+        selectors.topbarItem.querySelector('.topbar-icon').innerHTML = topbarIcons[item.icon];
+        selectors.topbarText.textContent = item.text;
+
+        selectors.topbarItem.classList.remove('fade-out');
+        selectors.topbarItem.classList.add('fade-in');
+
+        setTimeout(() => {
+            selectors.topbarItem.classList.remove('fade-in');
+        }, 300);
+    }, 300);
+}
+
+function initTopbarRotation() {
+    if (!selectors.topbarItem) return;
+    setInterval(rotateTopbar, 3000);
+}
 
 function buildWhatsAppUrl(message) {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -117,6 +161,7 @@ function init() {
     initNavigation();
     initReveal();
     initProductActions();
+    initTopbarRotation();
     bindScrollEvents();
     setActiveLink();
 }
