@@ -263,7 +263,7 @@ button {
     height: 200px;
     width: auto;
     object-fit: contain;
-    transform: translateY(8px);
+    transform: translateY(4px);
 }
 
 .nav-menu {
