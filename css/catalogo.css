@@ -2,6 +2,10 @@
    JB Acessórios - Catálogo Page CSS
    ======================================== */
 
+body {
+    padding-top: calc(var(--topbar-height) + var(--header-height));
+}
+
 /* ---- CATALOG HERO ---- */
 .catalog-hero {
     padding: calc(var(--topbar-height) + var(--header-height) + 44px) 0 44px;

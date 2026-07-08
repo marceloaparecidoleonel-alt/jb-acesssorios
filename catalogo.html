@@ -13,30 +13,14 @@
     <link rel="stylesheet" href="css/catalogo.css">
 </head>
 <body>
-
-    <!-- TOP BAR -->
-    <div class="topbar">
-        <div class="container topbar-content">
-            <div class="topbar-item">
-                <span class="topbar-icon">📍</span>
-                <span>Loja Física em Ribeirão Claro - PR</span>
-            </div>
-            <div class="topbar-item">
-                <span class="topbar-icon">💎</span>
-                <span>Prata 925 • Semijoias Premium</span>
-            </div>
-            <div class="topbar-item">
-                <span class="topbar-icon">📞</span>
-                <span>(43) 99186-4750</span>
-            </div>
-            <div class="topbar-item">
-                <span class="topbar-icon">📷</span>
-                <span>@jbacessorios_jb</span>
-            </div>
+    <div class="announcement-bar">
+        <div class="announcement-static">
+            <span>Atendimento ao Cliente</span>
+        </div>
+        <div class="announcement-item" id="announcementItem">
+            <span id="announcementText">Prata 925 de alta qualidade</span>
         </div>
     </div>
-
-    <!-- HEADER -->
     <header class="header" id="header">
         <nav class="nav container" aria-label="Menu principal">
             <a href="index.html" class="logo" aria-label="JB Acessórios - Início">
@@ -163,15 +147,11 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/5543991864750?text=Ol%C3%A1%2C%20vim%20pelo%20cat%C3%A1logo%20da%20JB%20Acess%C3%B3rios." class="floating-whatsapp" target="_blank" rel="noopener" aria-label="Falar com a JB Acessórios no WhatsApp">
-        <img src="assets/icons/whatsapp.svg" alt="">
-    </a>
-
-    <script src="js/script.js"></script>
     <!-- Firebase CDN -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/catalogo.js"></script>
 </body>
 </html>
