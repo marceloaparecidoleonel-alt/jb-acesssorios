@@ -65,9 +65,9 @@ body.menu-open {
     align-items: center;
     justify-content: center;
     color: #FFFFFF;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.4px;
     white-space: nowrap;
     opacity: 1;
