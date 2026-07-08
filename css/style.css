@@ -260,9 +260,10 @@ button {
 }
 
 .logo img {
-    height: 180px;
+    height: 200px;
     width: auto;
     object-fit: contain;
+    transform: translateY(8px);
 }
 
 .nav-menu {
