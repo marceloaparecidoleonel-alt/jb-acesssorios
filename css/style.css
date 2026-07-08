@@ -72,6 +72,7 @@ body.menu-open {
     white-space: nowrap;
     position: absolute;
     left: 20px;
+    z-index: 1;
 }
 
 .announcement-item {
@@ -87,6 +88,8 @@ body.menu-open {
     white-space: nowrap;
     opacity: 1;
     transition: opacity 0.2s ease, transform 0.2s ease;
+    flex: 1;
+    text-align: center;
 }
 
 .announcement-item.slide-out {
