@@ -271,16 +271,16 @@ button {
 .nav-list {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 50px;
     list-style: none;
 }
 
 .nav-link {
     position: relative;
     font-family: var(--font-serif);
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 400;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
     color: var(--color-black);
     text-decoration: none;
     transition: color var(--transition);
