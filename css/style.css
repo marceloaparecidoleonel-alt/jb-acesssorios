@@ -70,7 +70,8 @@ body.menu-open {
     letter-spacing: 0.4px;
     text-transform: uppercase;
     white-space: nowrap;
-    margin-right: auto;
+    position: absolute;
+    left: 20px;
 }
 
 .announcement-item {
