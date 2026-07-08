@@ -17,7 +17,7 @@
     --header-height: 75px;
     --topbar-height: 40px;
     --font-serif: 'Playfair Display', Georgia, serif;
-    --font-serif-elegant: 'Cormorant Garamond', Georgia, serif;
+    --font-serif-elegant: 'Bodoni Moda', Georgia, serif;
     --font-sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -411,9 +411,9 @@ button {
 .hero-left h1 {
     color: var(--color-white);
     font-family: var(--font-serif-elegant);
-    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     line-height: 1.1;
 }
 
