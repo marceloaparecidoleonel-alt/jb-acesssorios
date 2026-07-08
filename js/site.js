@@ -89,7 +89,7 @@ async function loadProdutos() {
 
         const ativos = snap.docs
             .map(d => ({ id: d.id, ...d.data() }))
-            .filter(p => p.status !== 'inativo')
+            .filter(p => p.status !== 'inativo' && p.destaque === true)
             .slice(0, 8);
 
         if (!ativos.length) return;

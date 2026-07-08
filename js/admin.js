@@ -274,6 +274,7 @@ async function openModalProduto(id = null) {
         document.getElementById('produtoDescricao').value = p.descricao || '';
         document.getElementById('produtoImagem').value     = p.imagem || '';
         document.getElementById('produtoStatus').value     = p.status || 'ativo';
+        document.getElementById('produtoDestaque').checked = p.destaque || false;
         document.getElementById('produtoImagemFile').value = '';
         select.value = p.colecao || '';
         updateImagePreview(p.imagem || '');
@@ -373,6 +374,7 @@ document.getElementById('formProduto').addEventListener('submit', async e => {
             descricao: document.getElementById('produtoDescricao').value.trim(),
             imagem:    imagemUrl,
             status:    document.getElementById('produtoStatus').value,
+            destaque:  document.getElementById('produtoDestaque').checked,
         };
 
         if (!id) {
