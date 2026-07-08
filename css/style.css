@@ -77,12 +77,12 @@ body.menu-open {
 
 .announcement-item.slide-out {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateX(-200px);
 }
 
 .announcement-item.slide-in {
     opacity: 0;
-    transform: translateX(50px);
+    transform: translateX(200px);
 }
 
 .topbar-content {
