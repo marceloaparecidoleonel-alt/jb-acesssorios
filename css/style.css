@@ -69,6 +69,7 @@ body.menu-open {
     font-size: 14px;
     font-weight: 100;
     letter-spacing: 0.4px;
+    text-transform: uppercase;
     white-space: nowrap;
     opacity: 1;
     transition: opacity 0.2s ease, transform 0.2s ease;
