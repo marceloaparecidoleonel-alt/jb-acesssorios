@@ -64,7 +64,7 @@ body.menu-open {
     display: flex;
     align-items: center;
     color: #FFFFFF;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.4px;
