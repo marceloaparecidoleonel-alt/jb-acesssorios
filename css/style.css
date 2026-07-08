@@ -412,8 +412,8 @@ button {
     color: var(--color-white);
     font-family: var(--font-serif);
     font-size: clamp(2.8rem, 5vw, 4.5rem);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    letter-spacing: 0.5px;
     line-height: 1.15;
 }
 
