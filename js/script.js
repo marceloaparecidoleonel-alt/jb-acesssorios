@@ -31,7 +31,7 @@ const topbarIcons = {
 function rotateTopbar() {
     if (!selectors.topbarItem || !selectors.topbarText) return;
 
-    selectors.topbarItem.classList.add('fade-out');
+    selectors.topbarItem.classList.remove('animate');
 
     setTimeout(() => {
         currentTopbarIndex = (currentTopbarIndex + 1) % topbarItems.length;
@@ -40,18 +40,14 @@ function rotateTopbar() {
         selectors.topbarItem.querySelector('.topbar-icon').innerHTML = topbarIcons[item.icon];
         selectors.topbarText.textContent = item.text;
 
-        selectors.topbarItem.classList.remove('fade-out');
-        selectors.topbarItem.classList.add('fade-in');
-
-        setTimeout(() => {
-            selectors.topbarItem.classList.remove('fade-in');
-        }, 300);
-    }, 300);
+        selectors.topbarItem.classList.add('animate');
+    }, 100);
 }
 
 function initTopbarRotation() {
     if (!selectors.topbarItem) return;
-    setInterval(rotateTopbar, 3000);
+    selectors.topbarItem.classList.add('animate');
+    setInterval(rotateTopbar, 4000);
 }
 
 function buildWhatsAppUrl(message) {
