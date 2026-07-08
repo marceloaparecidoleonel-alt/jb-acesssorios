@@ -67,7 +67,7 @@ body.menu-open {
     color: #FFFFFF;
     font-family: var(--font-sans);
     font-size: 14px;
-    font-weight: 200;
+    font-weight: 100;
     letter-spacing: 0.4px;
     white-space: nowrap;
     opacity: 1;
