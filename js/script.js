@@ -40,14 +40,18 @@ function rotateTopbar() {
         selectors.topbarItem.querySelector('.topbar-icon').innerHTML = topbarIcons[item.icon];
         selectors.topbarText.textContent = item.text;
 
-        selectors.topbarItem.classList.add('animate');
+        setTimeout(() => {
+            selectors.topbarItem.classList.add('animate');
+        }, 500);
     }, 100);
 }
 
 function initTopbarRotation() {
     if (!selectors.topbarItem) return;
-    selectors.topbarItem.classList.add('animate');
-    setInterval(rotateTopbar, 4000);
+    setTimeout(() => {
+        selectors.topbarItem.classList.add('animate');
+    }, 500);
+    setInterval(rotateTopbar, 4500);
 }
 
 function buildWhatsAppUrl(message) {
