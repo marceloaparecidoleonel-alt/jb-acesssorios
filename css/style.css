@@ -1333,32 +1333,6 @@ button {
     font-size: 0.85rem;
 }
 
-.floating-whatsapp {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: 999;
-    display: grid;
-    place-items: center;
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    background: #25d366;
-    box-shadow: 0 18px 42px rgba(37, 211, 102, 0.36);
-    animation: whatsappPulse 2.4s ease-in-out infinite;
-    transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.floating-whatsapp:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 22px 52px rgba(37, 211, 102, 0.46);
-}
-
-.floating-whatsapp img {
-    width: 31px;
-    height: 31px;
-}
-
 .reveal {
     opacity: 0;
     transform: translateY(40px);
@@ -1384,11 +1358,3 @@ button {
     }
 }
 
-@keyframes whatsappPulse {
-    0%, 100% {
-        box-shadow: 0 18px 42px rgba(37, 211, 102, 0.36), 0 0 0 0 rgba(37, 211, 102, 0.28);
-    }
-    50% {
-        box-shadow: 0 18px 42px rgba(37, 211, 102, 0.36), 0 0 0 12px rgba(37, 211, 102, 0);
-    }
-}
