@@ -177,7 +177,7 @@ button {
 .about-content h2,
 .contact-content h2 {
     color: var(--color-black);
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
     line-height: 1.2;
