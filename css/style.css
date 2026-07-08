@@ -169,12 +169,13 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 14px 32px;
-    border-radius: 4px;
-    font-size: 0.85rem;
+    min-height: 52px;
+    padding: 16px 40px;
+    border-radius: 2px;
+    font-size: 0.9rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-decoration: none;
     transition: all var(--transition);
     cursor: pointer;
@@ -182,7 +183,7 @@ button {
 }
 
 .btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .btn-primary {
@@ -207,13 +208,13 @@ button {
 
 .btn-outline {
     background: transparent;
-    border: 1px solid var(--color-black);
-    color: var(--color-black);
+    border: 1px solid var(--color-white);
+    color: var(--color-white);
 }
 
 .btn-outline:hover {
-    background: var(--color-black);
-    color: var(--color-white);
+    background: var(--color-white);
+    color: var(--color-black);
 }
 
 .btn-gold {
