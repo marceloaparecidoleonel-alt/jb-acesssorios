@@ -42,12 +42,11 @@ async function fsSetConfig(data) {
 }
 
 // ---- CACHE ----
-let _cache = { produtos: null, colecoes: null, depoimentos: null };
-function clearCache(key) { if (key) _cache[key] = null; else _cache = { produtos: null, colecoes: null, depoimentos: null }; }
+let _cache = { produtos: null, colecoes: null };
+function clearCache(key) { if (key) _cache[key] = null; else _cache = { produtos: null, colecoes: null }; }
 
-async function getProdutos()    { if (!_cache.produtos)    _cache.produtos    = await fsGetAll('produtos');    return _cache.produtos    || []; }
-async function getColecoes()    { if (!_cache.colecoes)    _cache.colecoes    = await fsGetAll('colecoes');    return _cache.colecoes    || []; }
-async function getDepoimentos() { if (!_cache.depoimentos) _cache.depoimentos = await fsGetAll('depoimentos'); return _cache.depoimentos || []; }
+async function getProdutos() { if (!_cache.produtos) _cache.produtos = await fsGetAll('produtos'); return _cache.produtos || []; }
+async function getColecoes() { if (!_cache.colecoes) _cache.colecoes = await fsGetAll('colecoes'); return _cache.colecoes || []; }
 
 // ---- UI HELPERS ----
 function setBtnLoading(btn, loading, label) {
@@ -155,7 +154,7 @@ auth.onAuthStateChanged(user => {
 const navItems   = document.querySelectorAll('.nav-item');
 const pages      = document.querySelectorAll('.page');
 const breadcrumb = document.getElementById('breadcrumb');
-const labels     = { dashboard:'Dashboard', produtos:'Produtos', colecoes:'Coleções', depoimentos:'Depoimentos', configuracoes:'Configurações' };
+const labels     = { dashboard:'Dashboard', produtos:'Produtos', colecoes:'Coleções', configuracoes:'Configurações' };
 
 function navigateTo(pageId) {
     pages.forEach(p => p.classList.remove('active'));
@@ -168,7 +167,6 @@ function navigateTo(pageId) {
     if (pageId === 'dashboard')     renderDashboard();
     if (pageId === 'produtos')      renderProdutos();
     if (pageId === 'colecoes')      renderColecoes();
-    if (pageId === 'depoimentos')   renderDepoimentos();
     if (pageId === 'configuracoes') renderConfiguracoes();
     document.getElementById('sidebar').classList.remove('open');
 }
@@ -187,7 +185,6 @@ document.addEventListener('click', e => {
             setTimeout(() => {
                 if (page === 'produtos')    openModalProduto();
                 if (page === 'colecoes')    openModalColecao();
-                if (page === 'depoimentos') openModalDepoimento();
             }, 60);
         }
     }
@@ -199,11 +196,10 @@ document.getElementById('sidebarToggle').addEventListener('click', () => {
 
 // ---- DASHBOARD ----
 async function renderDashboard() {
-    const [produtos, colecoes, depoimentos] = await Promise.all([getProdutos(), getColecoes(), getDepoimentos()]);
-    document.getElementById('statProdutos').textContent    = produtos.filter(p => p.status !== 'inativo').length;
-    document.getElementById('statColecoes').textContent    = colecoes.length;
-    document.getElementById('statDepoimentos').textContent = depoimentos.length;
-    document.getElementById('statContatos').textContent    = '—';
+    const [produtos, colecoes] = await Promise.all([getProdutos(), getColecoes()]);
+    document.getElementById('statProdutos').textContent = produtos.filter(p => p.status !== 'inativo').length;
+    document.getElementById('statColecoes').textContent = colecoes.length;
+    document.getElementById('statContatos').textContent = '—';
     const tbody = document.querySelector('#dashProdutosTable tbody');
     const last5 = [...produtos].reverse().slice(0, 5);
     tbody.innerHTML = last5.length
@@ -584,88 +580,6 @@ async function deleteColecao(id) {
         showToast('Coleção excluída.');
     } catch {
         showToast('Erro ao excluir coleção.');
-    }
-}
-
-// ---- DEPOIMENTOS ----
-async function renderDepoimentos() {
-    const grid  = document.getElementById('depoimentosGrid');
-    const empty = document.getElementById('depoimentosEmpty');
-    grid.innerHTML = '<p class="loading-row">Carregando...</p>';
-    empty.style.display = 'none';
-    const deps = await getDepoimentos();
-    if (!deps.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
-    empty.style.display = 'none';
-    grid.innerHTML = deps.map(d => `
-        <div class="testimonial-admin-card">
-            <div class="stars">${'★'.repeat(d.estrelas || 5)}${'☆'.repeat(5 - (d.estrelas || 5))}</div>
-            <p>"${d.texto}"</p>
-            <h4>${d.nome}</h4>
-            <div class="card-actions">
-                <button class="btn-edit"   onclick="editDepoimento('${d.id}')">Editar</button>
-                <button class="btn-delete" onclick="deleteDepoimento('${d.id}')">Excluir</button>
-            </div>
-        </div>`).join('');
-}
-
-document.getElementById('btnNovoDepoimento').addEventListener('click', () => openModalDepoimento());
-
-async function openModalDepoimento(id = null) {
-    const modal = document.getElementById('modalDepoimento');
-    const title = document.getElementById('modalDepoimentoTitle');
-    const form  = document.getElementById('formDepoimento');
-    if (id) {
-        const d = (await getDepoimentos()).find(x => x.id === id);
-        if (!d) return;
-        title.textContent = 'Editar Depoimento';
-        document.getElementById('depoimentoId').value       = d.id;
-        document.getElementById('depoimentoNome').value     = d.nome;
-        document.getElementById('depoimentoTexto').value    = d.texto;
-        document.getElementById('depoimentoEstrelas').value = d.estrelas || 5;
-    } else {
-        title.textContent = 'Novo Depoimento';
-        form.reset();
-        document.getElementById('depoimentoId').value = '';
-    }
-    modal.classList.add('open');
-}
-
-document.getElementById('formDepoimento').addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = e.target.querySelector('[type=submit]');
-    const id  = document.getElementById('depoimentoId').value;
-    const data = {
-        nome:     document.getElementById('depoimentoNome').value.trim(),
-        texto:    document.getElementById('depoimentoTexto').value.trim(),
-        estrelas: parseInt(document.getElementById('depoimentoEstrelas').value),
-    };
-    setBtnLoading(btn, true, 'Salvar Depoimento');
-    try {
-        if (id) { await fsUpdate('depoimentos', id, data); showToast('Depoimento atualizado!', 'gold'); }
-        else    { await fsAdd('depoimentos', data);         showToast('Depoimento adicionado!', 'gold'); }
-        clearCache('depoimentos');
-        closeModal('modalDepoimento');
-        await renderDepoimentos();
-        await renderDashboard();
-    } catch {
-        showToast('Erro ao salvar depoimento. Verifique a conexão.');
-    } finally {
-        setBtnLoading(btn, false, 'Salvar Depoimento');
-    }
-});
-
-function editDepoimento(id) { openModalDepoimento(id); }
-
-async function deleteDepoimento(id) {
-    if (!confirm('Excluir este depoimento?')) return;
-    try {
-        await fsDelete('depoimentos', id);
-        clearCache('depoimentos');
-        await renderDepoimentos();
-        await renderDashboard();
-        showToast('Depoimento excluído.');
-    } catch {
-        showToast('Erro ao excluir depoimento.');
     }
 }
 

@@ -24,10 +24,6 @@
         grid-template-columns: 1fr;
     }
 
-    .testimonials-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .instagram-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -162,7 +158,6 @@
 
     .categories-grid,
     .catalog-grid,
-    .testimonials-grid,
     .footer-grid {
         grid-template-columns: 1fr;
     }
@@ -240,10 +235,6 @@
 
     .category-card img {
         height: 240px;
-    }
-
-    .testimonials-grid {
-        grid-template-columns: 1fr;
     }
 
     .footer-grid {
