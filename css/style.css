@@ -64,9 +64,9 @@ body.menu-open {
     display: flex;
     align-items: center;
     color: #FFFFFF;
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-size: 14px;
-    font-weight: 100;
+    font-weight: 400;
     letter-spacing: 0.4px;
     text-transform: uppercase;
     white-space: nowrap;
