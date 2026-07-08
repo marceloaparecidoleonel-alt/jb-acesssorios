@@ -75,6 +75,21 @@ body.menu-open {
     z-index: 1;
 }
 
+.announcement-static-right {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    position: absolute;
+    right: 20px;
+    z-index: 1;
+}
+
 .announcement-item {
     display: flex;
     align-items: center;
