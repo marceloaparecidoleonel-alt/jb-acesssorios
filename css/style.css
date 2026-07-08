@@ -56,38 +56,31 @@ body.menu-open {
     background: #0C2D6B;
     overflow: hidden;
     display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.announcement-track {
-    display: flex;
-    width: max-content;
-    will-change: transform;
-    animation: marquee 30s linear infinite;
-}
-
-.announcement-track:hover {
-    animation-play-state: paused;
-}
-
-.announcement-content {
+.announcement-item {
     display: flex;
     align-items: center;
-    white-space: nowrap;
+    justify-content: center;
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.4px;
-    padding: 0 40px;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-@keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+.announcement-item.slide-out {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.announcement-item.slide-in {
+    opacity: 0;
+    transform: translateX(50px);
 }
 
 .topbar-content {

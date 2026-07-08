@@ -1,8 +1,4 @@
 @media (max-width: 1120px) {
-    .announcement-track {
-        animation-duration: 40s;
-    }
-
     .hero-content {
         grid-template-columns: 1fr 1fr;
         gap: 48px;
@@ -150,10 +146,9 @@
 }
 
 @media (max-width: 700px) {
-    .announcement-content {
+    .announcement-item {
         font-size: 12px;
         letter-spacing: 0.3px;
-        padding: 0 20px;
     }
 
     .section-heading {

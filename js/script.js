@@ -7,8 +7,41 @@ const selectors = {
     navLinks: document.querySelectorAll(".nav-link"),
     revealItems: document.querySelectorAll(".reveal"),
     heroBg: document.querySelector(".hero-bg"),
-    productButtons: document.querySelectorAll(".product-whatsapp")
+    productButtons: document.querySelectorAll(".product-whatsapp"),
+    announcementItem: document.getElementById("announcementItem"),
+    announcementText: document.getElementById("announcementText")
 };
+
+const announcementTexts = [
+    "Prata 925 de alta qualidade",
+    "Semijoias Premium",
+    "Parcelamento facilitado"
+];
+
+let currentAnnouncementIndex = 0;
+
+function rotateAnnouncement() {
+    if (!selectors.announcementItem || !selectors.announcementText) return;
+
+    selectors.announcementItem.classList.add('slide-out');
+
+    setTimeout(() => {
+        currentAnnouncementIndex = (currentAnnouncementIndex + 1) % announcementTexts.length;
+        selectors.announcementText.textContent = announcementTexts[currentAnnouncementIndex];
+
+        selectors.announcementItem.classList.remove('slide-out');
+        selectors.announcementItem.classList.add('slide-in');
+
+        setTimeout(() => {
+            selectors.announcementItem.classList.remove('slide-in');
+        }, 200);
+    }, 200);
+}
+
+function initAnnouncementRotation() {
+    if (!selectors.announcementItem) return;
+    setInterval(rotateAnnouncement, 2000);
+}
 
 function buildWhatsAppUrl(message) {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -117,6 +150,7 @@ function init() {
     initNavigation();
     initReveal();
     initProductActions();
+    initAnnouncementRotation();
     bindScrollEvents();
     setActiveLink();
 }
