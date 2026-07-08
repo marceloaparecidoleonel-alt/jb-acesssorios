@@ -57,6 +57,29 @@ body.menu-open {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.05em;
+    overflow: hidden;
+}
+
+.topbar-marquee {
+    width: 100%;
+    overflow: hidden;
+}
+
+.topbar-track {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    animation: marquee 30s linear infinite;
+    padding: 10px 0;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .topbar-content {
