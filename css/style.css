@@ -39,6 +39,7 @@ body {
     font-family: var(--font-sans);
     line-height: 1.65;
     overflow-x: hidden;
+    padding-top: calc(var(--topbar-height) + var(--header-height));
 }
 
 body.menu-open {
@@ -46,6 +47,11 @@ body.menu-open {
 }
 
 .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    width: 100%;
     background: var(--color-blue-dark);
     color: var(--color-white);
     font-size: 0.75rem;
