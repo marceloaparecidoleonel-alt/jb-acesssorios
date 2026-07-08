@@ -73,13 +73,13 @@ body.menu-open {
 }
 
 .topbar-item.fade-out {
-    opacity: 0;
-    transform: translateX(200px);
+    opacity: 0.3;
+    transform: translateX(50vw);
 }
 
 .topbar-item.fade-in {
-    opacity: 0;
-    transform: translateX(-200px);
+    opacity: 0.3;
+    transform: translateX(-50vw);
 }
 
 .topbar-content {
